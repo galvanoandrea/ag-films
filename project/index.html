@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AG FILMS · Andrea Galvano — Fotografia</title>
+  <meta name="description" content="Fotografia sportiva, street e drone. Andrea Galvano — AG FILMS." />
+  <link rel="icon" type="image/png" href="assets/ag-mark.png" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="styles-home.css" />
+</head>
+<body>
+  <div data-ag-header></div>
+
+  <!-- HERO -->
+  <section class="home-hero">
+    <div class="home-hero-bg" id="hero-bg"></div>
+    <div class="home-hero-content">
+      <img src="assets/ag-films-logo-full-clean.png" alt="AG FILMS · Andrea Galvano" class="home-hero-logo" />
+      <div class="home-hero-divider">Sport · Street · Drone</div>
+      <div class="home-hero-actions">
+        <a href="galleria.html" class="btn btn-gold">
+          <span>Sfoglia le foto</span>
+          <span class="arrow"></span>
+        </a>
+        <a href="#categorie" class="btn btn-outline">
+          <span>Esplora le categorie</span>
+        </a>
+      </div>
+    </div>
+    <div class="scroll-hint">
+      <span>Scorri</span>
+      <span class="scroll-hint-line"></span>
+    </div>
+  </section>
+
+  <!-- PREVIEW GRID -->
+  <section class="section container">
+    <div class="section-head">
+      <div class="left">
+        <span class="eyebrow">Ultime foto</span>
+        <h2>Catturate in movimento.</h2>
+      </div>
+      <p>Una selezione dagli archivi più recenti. Ogni scatto è acquistabile in alta risoluzione, senza watermark, con licenza personale o commerciale.</p>
+    </div>
+    <div class="preview-grid" id="preview-grid"></div>
+    <div class="section-cta">
+      <a href="galleria.html" class="btn btn-gold">
+        <span>Vedi tutta la galleria</span>
+        <span class="arrow"></span>
+      </a>
+    </div>
+  </section>
+
+  <!-- CATEGORIES -->
+  <section class="categories" id="categorie">
+    <div class="container" style="padding-top: var(--space-10); padding-bottom: var(--space-10);">
+      <div class="section-head" style="text-align:center; justify-content:center;">
+        <div class="left" style="margin:0 auto; text-align:center;">
+          <span class="eyebrow" style="justify-content:center;">Cosa scatto</span>
+          <h2>Tre sguardi, una visione.</h2>
+        </div>
+      </div>
+      <div class="cat-grid">
+        <a href="galleria.html?cat=sport" class="cat-card">
+          <span class="cat-num">01 / Sport</span>
+          <h3 class="cat-title">Sport</h3>
+          <p class="cat-desc">Nuoto, calcio, vela, atletica. Il gesto fermato a 1/2000 di secondo, dentro il rumore del campo.</p>
+          <div class="cat-meta">
+            <span class="cat-count" id="count-sport">— foto</span>
+            <span class="cat-arrow"><span>Apri</span><span class="arrow"></span></span>
+          </div>
+        </a>
+        <a href="galleria.html?cat=street" class="cat-card">
+          <span class="cat-num">02 / Street</span>
+          <h3 class="cat-title">Street</h3>
+          <p class="cat-desc">Como, le sue piazze, le sue ore blu. Architettura, luce, persone che attraversano.</p>
+          <div class="cat-meta">
+            <span class="cat-count" id="count-street">— foto</span>
+            <span class="cat-arrow"><span>Apri</span><span class="arrow"></span></span>
+          </div>
+        </a>
+        <a href="galleria.html?cat=drone" class="cat-card">
+          <span class="cat-num">03 / Drone</span>
+          <h3 class="cat-title">Drone</h3>
+          <p class="cat-desc">Il lago dall'alto, le Grigne, le ville. Prospettive che restituiscono il paesaggio così com'è.</p>
+          <div class="cat-meta">
+            <span class="cat-count" id="count-drone">— foto</span>
+            <span class="cat-arrow"><span>Apri</span><span class="arrow"></span></span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROCESS -->
+  <section class="section container process">
+    <div class="section-head">
+      <div class="left">
+        <span class="eyebrow">Come funziona</span>
+        <h2>Tre passi, file in 48 ore.</h2>
+      </div>
+    </div>
+    <div class="process-grid">
+      <div class="process-step">
+        <h3>Trova la foto</h3>
+        <p>Cerca per categoria, evento o location. Ogni anteprima è visibile con watermark — il file originale arriva pulito.</p>
+      </div>
+      <div class="process-step">
+        <h3>Acquista con Stripe</h3>
+        <p>Pagamento sicuro tramite Stripe, carta o Apple Pay. Ricevuta automatica via email all'indirizzo che lasci.</p>
+      </div>
+      <div class="process-step">
+        <h3>Scarica il file</h3>
+        <p>Link di download privato in alta risoluzione, valido 48 ore. Licenza personale inclusa, commerciale su richiesta.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- QUOTE BAND -->
+  <section class="quote-band">
+    <div class="container">
+      <blockquote>
+        Una foto buona ferma il tempo. Una foto giusta ti riporta esattamente dove eri.
+        <span class="quote-cite">— Andrea Galvano</span>
+      </blockquote>
+    </div>
+  </section>
+
+  <div data-ag-footer></div>
+
+  <script src="js/photos-data.js"></script>
+  <script src="js/photo-engine.js"></script>
+  <script src="js/chrome.js"></script>
+  <script>
+    AGChrome.mount('home');
+
+    // Hero background — golden hour drone composition
+    AGPhoto.renderPhoto(document.getElementById('hero-bg'), {
+      seed: 999,
+      category: 'drone',
+      width: 1920,
+      height: 1080
+    });
+
+    // Preview grid — 5 mixed featured photos
+    const featured = ['dr01', 'sp02', 'st01', 'sp05', 'dr03']
+      .map(id => AG_PHOTOS.find(p => p.id === id))
+      .filter(Boolean);
+
+    const grid = document.getElementById('preview-grid');
+    featured.forEach((p, idx) => {
+      const card = document.createElement('a');
+      card.href = `galleria.html?id=${p.id}`;
+      card.className = 'photo-card';
+      const isFeatured = idx < 2;
+      card.innerHTML = `
+        <div class="photo">
+          <span class="photo-cat">${p.cat}</span>
+          <div class="watermark">
+            <div class="wm-grid">
+              ${'<span>© AG FILMS</span>'.repeat(40)}
+            </div>
+            <span class="wm-corner">© AG FILMS</span>
+          </div>
+        </div>
+        <div class="photo-meta">
+          <div class="left">
+            <span class="photo-title">${p.title}</span>
+            <span class="photo-loc">${p.loc}</span>
+          </div>
+          <span class="photo-price">€ ${p.price}</span>
+        </div>
+      `;
+      grid.appendChild(card);
+      const photoEl = card.querySelector('.photo');
+      const canvas = document.createElement('canvas');
+      const aspect = isFeatured ? [800, 600] : [600, 750];
+      canvas.width = aspect[0];
+      canvas.height = aspect[1];
+      AGPhoto.composePhoto(canvas, { seed: p.seed, category: p.cat });
+      photoEl.insertBefore(canvas, photoEl.firstChild);
+    });
+
+    // Category counts
+    const countBy = (c) => AG_PHOTOS.filter(p => p.cat === c).length;
+    document.getElementById('count-sport').textContent = `${countBy('sport')} foto`;
+    document.getElementById('count-street').textContent = `${countBy('street')} foto`;
+    document.getElementById('count-drone').textContent = `${countBy('drone')} foto`;
+  </script>
+</body>
+</html>

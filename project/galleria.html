@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Galleria · AG FILMS</title>
+  <meta name="description" content="Galleria fotografica AG Films. Foto sportive, street e drone da Como e oltre." />
+  <link rel="icon" type="image/png" href="assets/ag-mark.png" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="styles-galleria.css" />
+</head>
+<body>
+  <div data-ag-header></div>
+
+  <main>
+    <section class="gallery-hero">
+      <div class="container">
+        <span class="eyebrow">Catalogo · 2024</span>
+        <h1>Galleria.</h1>
+        <p>Sfoglia, scegli, scarica. Ogni foto è disponibile in alta risoluzione, senza watermark, dopo l'acquisto. Link di download valido 48 ore.</p>
+      </div>
+    </section>
+
+    <div class="filter-bar">
+      <div class="container">
+        <div class="filter-row" id="filter-cat-row"></div>
+        <div class="filter-row" id="filter-event-row"></div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="gallery-grid" id="gallery-grid"></div>
+      <div class="gallery-empty" id="gallery-empty" style="display:none;">
+        Nessuna foto in questa categoria.
+      </div>
+    </div>
+  </main>
+
+  <!-- Modal -->
+  <div class="modal-backdrop" id="modal" role="dialog" aria-modal="true" aria-hidden="true">
+    <button class="modal-close" id="modal-close" aria-label="Chiudi">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M6 6l12 12M18 6L6 18"/>
+      </svg>
+    </button>
+    <div class="modal" id="modal-inner"></div>
+  </div>
+
+  <div data-ag-footer></div>
+
+  <script src="js/photos-data.js"></script>
+  <script src="js/photo-engine.js"></script>
+  <script src="js/chrome.js"></script>
+  <script src="js/galleria.js"></script>
+</body>
+</html>
