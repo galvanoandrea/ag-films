@@ -31,7 +31,13 @@ export async function POST(request: NextRequest) {
   }
 
   const originalBuffer = Buffer.from(await fileBlob.arrayBuffer())
-  const watermarkedBuffer = await applyWatermark(originalBuffer)
+  let watermarkedBuffer: Buffer
+  try {
+    watermarkedBuffer = await applyWatermark(originalBuffer)
+  } catch (e) {
+    console.error('applyWatermark failed:', e)
+    return NextResponse.json({ error: `Watermark fallito: ${(e as Error).message}` }, { status: 500 })
+  }
 
   const wmPath = `${photoId}/watermarked.jpg`
   const { error: wmErr } = await supabase.storage

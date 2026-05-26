@@ -61,33 +61,25 @@ export async function applyWatermark(inputBuffer: Buffer): Promise<Buffer> {
 
   const { width: tW = 300, height: tH = 120 } = await sharp(rotatedTile).metadata()
 
-  // Build a full-size transparent overlay, tile the rotated text onto it
+  // Tile the watermark directly onto the resized image — no intermediate overlay
   const STEP_X = 260
   const STEP_Y = 130
 
   const tiles: sharp.OverlayOptions[] = []
-  for (let row = 0; row * STEP_Y + tH <= h + tH; row++) {
+  for (let row = 0; row * STEP_Y < h + tH; row++) {
     const stagger = row % 2 === 1 ? Math.round(STEP_X / 2) : 0
-    for (let col = 0; col * STEP_X + tW <= w + tW; col++) {
+    for (let col = 0; col * STEP_X < w + tW; col++) {
       const left = col * STEP_X + stagger
       const top = row * STEP_Y
-      // Only composite if tile fits fully within bounds
-      if (left + tW <= w && top + tH <= h) {
+      if (left < w && top < h) {
         tiles.push({ input: rotatedTile, left, top, blend: 'over' })
       }
     }
   }
 
-  const overlay = await sharp({
-    create: { width: w, height: h, channels: 4, background: { r: 0, g: 0, b: 0, alpha: 0 } },
-  })
-    .composite(tiles)
-    .png()
-    .toBuffer()
-
   return sharp(oriented)
     .resize({ width: w, height: h, fit: 'inside' })
-    .composite([{ input: overlay, blend: 'over' }])
+    .composite(tiles)
     .jpeg({ quality: 88, mozjpeg: true })
     .toBuffer()
 }
