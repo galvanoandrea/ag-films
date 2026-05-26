@@ -5,7 +5,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 
 interface Props {
-  activePage?: 'home' | 'galleria' | 'admin'
+  activePage?: 'home' | 'eventi' | 'admin'
 }
 
 export default function Header({ activePage }: Props) {
@@ -33,12 +33,12 @@ export default function Header({ activePage }: Props) {
           <Link href="/" className={activePage === 'home' ? 'is-active' : ''}>
             Home
           </Link>
-          <Link href="/galleria" className={activePage === 'galleria' ? 'is-active' : ''}>
-            Galleria
+          <Link href="/eventi" className={activePage === 'eventi' ? 'is-active' : ''}>
+            Eventi
           </Link>
         </nav>
 
-        <Link href="/galleria" className="btn btn-ghost nav-cta">
+        <Link href="/eventi" className="btn btn-ghost nav-cta">
           <span>Sfoglia le foto</span>
           <span className="arrow" />
         </Link>
@@ -56,10 +56,10 @@ export default function Header({ activePage }: Props) {
         <Link href="/" className={activePage === 'home' ? 'is-active' : ''} onClick={() => setMenuOpen(false)}>
           Home
         </Link>
-        <Link href="/galleria" className={activePage === 'galleria' ? 'is-active' : ''} onClick={() => setMenuOpen(false)}>
+        <Link href="/eventi" className={activePage === 'eventi' ? 'is-active' : ''} onClick={() => setMenuOpen(false)}>
           Galleria
         </Link>
-        <Link href="/galleria" className="btn btn-outline" onClick={() => setMenuOpen(false)}
+        <Link href="/eventi" className="btn btn-outline" onClick={() => setMenuOpen(false)}
           style={{ marginTop: 16, justifyContent: 'center' }}>
           <span>Sfoglia le foto</span>
           <span className="arrow" />

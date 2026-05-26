@@ -13,7 +13,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Non autorizzato' }, { status: 401 })
   }
 
-  const { photoId, originalPath, title, location, category, price } = await request.json()
+  const { photoId, originalPath, title, location, category, price, eventId } = await request.json()
 
   if (!photoId || !originalPath || !title || !price) {
     return NextResponse.json({ error: 'Campi mancanti' }, { status: 400 })
@@ -55,7 +55,7 @@ export async function POST(request: NextRequest) {
       title,
       location: location ?? '',
       category: category ?? 'sport',
-      event_id: null,
+      event_id: eventId ?? null,
       price: Math.round(Number(price) * 100),
       storage_path_watermarked: wmPath,
       storage_path_original: originalPath,
