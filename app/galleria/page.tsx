@@ -2,7 +2,6 @@ import type { Metadata } from 'next'
 import { createClient } from '@/lib/supabase/server'
 import type { Photo, Event, PhotoWithUrl } from '@/lib/supabase/types'
 import Header from '@/components/Header'
-import Footer from '@/components/Footer'
 import GalleryClient from '@/components/GalleryClient'
 
 export const metadata: Metadata = { title: 'Galleria' }
@@ -31,7 +30,6 @@ export default async function GalleriaPage({ searchParams }: Props) {
             Aggiungi <code>NEXT_PUBLIC_SUPABASE_URL</code> e <code>NEXT_PUBLIC_SUPABASE_ANON_KEY</code> nelle impostazioni Vercel.
           </p>
         </main>
-        <Footer />
       </>
     )
   }
@@ -64,7 +62,6 @@ export default async function GalleriaPage({ searchParams }: Props) {
             {String(err)}
           </pre>
         </main>
-        <Footer />
       </>
     )
   }
@@ -86,7 +83,6 @@ export default async function GalleriaPage({ searchParams }: Props) {
         initialEvent={params.event ?? 'all'}
         successSessionId={params.success === 'true' ? (params.session_id ?? null) : null}
       />
-      <Footer />
     </>
   )
 }
