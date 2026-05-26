@@ -66,8 +66,7 @@ export default function PhotoList({ photos, onUpdated, onDeleted }: Props) {
             <div className="photo-row-info">
               <div className="photo-row-title">{photo.title}</div>
               <div className="photo-row-meta">
-                {photo.events?.name && `${photo.events.name} · `}
-                {photo.events?.category} · € {(photo.price / 100).toFixed(0)}
+                {photo.category} {photo.location ? `· ${photo.location}` : ''} · € {(photo.price / 100).toFixed(0)}
               </div>
             </div>
             <div className="photo-row-actions">

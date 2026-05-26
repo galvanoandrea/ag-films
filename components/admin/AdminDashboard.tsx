@@ -95,9 +95,7 @@ export default function AdminDashboard({ photos: initialPhotos, events: initialE
 
         {tab === 'upload' && (
           <UploadForm
-            events={events}
             onPhotoAdded={onPhotoAdded}
-            onEventAdded={onEventAdded}
             onDone={() => setTab('photos')}
           />
         )}

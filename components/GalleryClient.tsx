@@ -60,7 +60,7 @@ export default function GalleryClient({
 
   const filteredPhotos = useMemo(() => {
     let list = photos
-    if (activeCat !== 'all') list = list.filter((p) => p.events?.category === activeCat)
+    if (activeCat !== 'all') list = list.filter((p) => p.category === activeCat)
     if (activeEvent !== 'all') list = list.filter((p) => p.event_id === activeEvent)
     return list
   }, [photos, activeCat, activeEvent])
@@ -169,16 +169,13 @@ export default function GalleryClient({
                       sizes="(max-width: 560px) 100vw, (max-width: 880px) 50vw, 33vw"
                       style={{ objectFit: 'cover' }}
                     />
-                    <span className="photo-cat">{photo.events?.category ?? ''}</span>
+                    <span className="photo-cat">{photo.category}</span>
                     <span className="wm-corner">© AG FILMS</span>
                   </div>
                   <div className="photo-meta">
                     <div className="left">
                       <span className="photo-title">{photo.title}</span>
-                      <span className="photo-loc">
-                        {photo.events?.location}
-                        {photo.events?.date_label ? ` — ${photo.events.date_label}` : ''}
-                      </span>
+                      <span className="photo-loc">{photo.location}</span>
                     </div>
                     <span className="photo-price">€ {(photo.price / 100).toFixed(0)}</span>
                   </div>

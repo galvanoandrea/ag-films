@@ -15,6 +15,8 @@ export interface Event {
 export interface Photo {
   id: string
   title: string
+  location: string
+  category: Category
   event_id: string | null
   price: number // cents
   storage_path_watermarked: string
