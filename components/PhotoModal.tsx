@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
-import Image from 'next/image'
 import type { PhotoWithUrl } from '@/lib/supabase/types'
 
 type ModalState = 'preview' | 'paying' | 'success'
@@ -97,14 +96,8 @@ export default function PhotoModal({ photo, successSessionId, onClose }: Props) 
         <div className="modal-photo">
           <div className="photo-wrap">
             {photo && (
-              <Image
-                src={photo.watermarked_url}
-                alt={photo.title}
-                fill
-                sizes="(max-width: 880px) 100vw, 55vw"
-                style={{ objectFit: 'cover' }}
-                priority
-              />
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={photo.watermarked_url} alt={photo.title} />
             )}
             {photo && (
               <span className="photo-cat">{photo.events?.category ?? ''}</span>

@@ -298,10 +298,10 @@ h1, h2, h3, h4 {
   font-family: inherit; color: inherit;
 }
 .photo-card .photo {
-  position: relative; overflow: hidden; aspect-ratio: 4/5; background: #0a0a0a;
+  position: relative; overflow: hidden; background: #0a0a0a;
 }
 .photo-card .photo img {
-  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+  width: 100%; height: auto; display: block;
   transition: transform var(--dur-slow) var(--ease-out), filter var(--dur-slow) var(--ease-out);
 }
 .photo-card:hover .photo img { transform: scale(1.04); filter: brightness(1.06); }
@@ -407,8 +407,8 @@ h1, h2, h3, h4 {
 .modal-close svg { width: 16px; height: 16px; }
 
 .modal-photo { position: relative; background: var(--bg-elevated); border: 1px solid var(--border-quiet); overflow: hidden; }
-.modal-photo .photo-wrap { position: relative; aspect-ratio: 4/5; overflow: hidden; }
-.modal-photo .photo-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.modal-photo .photo-wrap { position: relative; overflow: hidden; }
+.modal-photo .photo-wrap img { width: 100%; height: auto; display: block; }
 .modal-photo .photo-cat { top: 16px; left: 16px; }
 
 .modal-side { padding: var(--space-3) 0; }

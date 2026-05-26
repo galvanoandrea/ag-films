@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useMemo } from 'react'
 import { useRouter } from 'next/navigation'
-import Image from 'next/image'
 import type { PhotoWithUrl, Event } from '@/lib/supabase/types'
 import PhotoModal from './PhotoModal'
 import Footer from './Footer'
@@ -162,13 +161,8 @@ export default function GalleryClient({
                   onClick={() => setOpenPhoto(photo)}
                 >
                   <div className="photo">
-                    <Image
-                      src={photo.watermarked_url}
-                      alt={photo.title}
-                      fill
-                      sizes="(max-width: 560px) 100vw, (max-width: 880px) 50vw, 33vw"
-                      style={{ objectFit: 'cover' }}
-                    />
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={photo.watermarked_url} alt={photo.title} loading="lazy" />
                     <span className="photo-cat">{photo.category}</span>
                     <span className="wm-corner">© AG FILMS</span>
                   </div>
