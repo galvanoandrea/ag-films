@@ -8,6 +8,14 @@ interface Props {
   onDone: () => void
 }
 
+async function safeJson(res: Response, fallback: string): Promise<Record<string, unknown>> {
+  try {
+    return await res.json()
+  } catch {
+    throw new Error(res.status === 504 ? 'Timeout — foto troppo grande, riprova' : fallback)
+  }
+}
+
 type Category = 'sport' | 'street' | 'drone'
 type UploadStep = 'idle' | 'presigning' | 'uploading' | 'processing' | 'done'
 
@@ -59,9 +67,9 @@ export default function UploadForm({ onPhotoAdded, onDone }: Props) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ filename: file.name }),
       })
-      const presignData = await presignRes.json()
-      if (!presignRes.ok) throw new Error(presignData.error)
-      const { signedUrl, path, photoId } = presignData
+      const presignData = await safeJson(presignRes, 'Presign fallito')
+      if (!presignRes.ok) throw new Error(String(presignData.error))
+      const { signedUrl, path, photoId } = presignData as { signedUrl: string; path: string; photoId: string }
 
       // Step 2: Upload directly to Supabase Storage (bypasses Vercel body limit)
       setStep('uploading')
@@ -81,13 +89,14 @@ export default function UploadForm({ onPhotoAdded, onDone }: Props) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ photoId, originalPath: path, title, location, category, price }),
       })
-      const processData = await processRes.json()
-      if (!processRes.ok) throw new Error(processData.error)
+      const processData = await safeJson(processRes, 'Errore watermark — riprova')
+      if (!processRes.ok) throw new Error(String(processData.error ?? `Errore server (${processRes.status})`))
 
       setStep('done')
+      const photo = processData.photo as unknown as import('@/lib/supabase/types').PhotoWithUrl
       onPhotoAdded({
-        ...processData.photo,
-        watermarked_url: `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/photos-watermarked/${processData.photo.storage_path_watermarked}`,
+        ...photo,
+        watermarked_url: `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/photos-watermarked/${photo.storage_path_watermarked}`,
       })
 
       setTimeout(onDone, 800)
