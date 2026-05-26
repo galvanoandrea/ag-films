@@ -1,6 +1,6 @@
 import sharp from 'sharp'
 
-const PREVIEW_MAX_PX = 2400
+const PREVIEW_MAX_PX = 4000
 
 // Pre-rendered 'AG FILMS' tile — stored as raw RGBA pixels (300×65×4).
 // Using raw format avoids PNG codec entirely (libspng breaks on Vercel).
@@ -46,6 +46,6 @@ export async function applyWatermark(inputBuffer: Buffer): Promise<Buffer> {
   return sharp(oriented)
     .resize({ width: w, height: h, fit: 'inside' })
     .composite(tiles)
-    .jpeg({ quality: 88, mozjpeg: true })
+    .jpeg({ quality: 94 })
     .toBuffer()
 }
