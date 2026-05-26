@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { createClient } from '@/lib/supabase/server'
+import { createServiceClient } from '@/lib/supabase/server'
 import LandingHero from '@/components/LandingHero'
 import Footer from '@/components/Footer'
 
@@ -9,20 +9,21 @@ export default async function HomePage() {
   let photoUrls: string[] = []
 
   try {
-    const supabase = await createClient()
+    const supabase = createServiceClient()
     const { data } = await supabase
       .from('photos')
-      .select('storage_path_watermarked')
+      .select('storage_path_original')
       .eq('published', true)
       .order('created_at', { ascending: false })
       .limit(24)
 
-    photoUrls = (data ?? []).map(
-      (p) =>
-        supabase.storage
-          .from('photos-watermarked')
-          .getPublicUrl(p.storage_path_watermarked).data.publicUrl
-    )
+    const paths = (data ?? []).map((p) => p.storage_path_original)
+    if (paths.length > 0) {
+      const { data: signed } = await supabase.storage
+        .from('photos-original')
+        .createSignedUrls(paths, 21600) // 6h expiry — background only
+      photoUrls = (signed ?? []).map((s) => s.signedUrl).filter((u): u is string => !!u)
+    }
   } catch {
     // show hero with empty background
   }
