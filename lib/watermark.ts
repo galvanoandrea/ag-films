@@ -5,19 +5,22 @@ const WM_LABEL = '© AG FILMS'
 const PREVIEW_MAX_PX = 2400
 
 export async function applyWatermark(inputBuffer: Buffer): Promise<Buffer> {
-  const meta = await sharp(inputBuffer).metadata()
+  // Apply EXIF rotation first — phones always encode portrait as landscape + rotation tag
+  const oriented = await sharp(inputBuffer).rotate().toBuffer()
+
+  const meta = await sharp(oriented).metadata()
   const origW = meta.width ?? 1200
   const origH = meta.height ?? 1500
 
-  // Compute preview dimensions (scale down if needed, never enlarge)
+  // Scale down if needed, never enlarge
   const scale = Math.min(1, PREVIEW_MAX_PX / Math.max(origW, origH))
   const w = Math.round(origW * scale)
   const h = Math.round(origH * scale)
 
   const svgOverlay = buildWatermarkSVG(w, h)
 
-  return sharp(inputBuffer)
-    .resize({ width: w, height: h, fit: 'fill' })
+  return sharp(oriented)
+    .resize({ width: w, height: h, fit: 'inside' })
     .composite([{ input: Buffer.from(svgOverlay), top: 0, left: 0 }])
     .jpeg({ quality: 88, mozjpeg: true })
     .toBuffer()
