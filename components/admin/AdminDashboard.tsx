@@ -21,14 +21,12 @@ interface Props {
 export default function AdminDashboard({ photos: initialPhotos, events: initialEvents, stats }: Props) {
   const [tab, setTab] = useState<'upload' | 'photos'>('photos')
   const [photos, setPhotos] = useState<PhotoWithUrl[]>(initialPhotos)
-  const [events, setEvents] = useState<Event[]>(initialEvents)
+  const [events] = useState<Event[]>(initialEvents)
+  const [migrating, setMigrating] = useState(false)
+  const [migrateMsg, setMigrateMsg] = useState('')
 
   function onPhotoAdded(photo: PhotoWithUrl) {
     setPhotos((prev) => [photo, ...prev])
-  }
-
-  function onEventAdded(event: Event) {
-    setEvents((prev) => [event, ...prev])
   }
 
   function onPhotoUpdated(updated: PhotoWithUrl) {
@@ -42,6 +40,24 @@ export default function AdminDashboard({ photos: initialPhotos, events: initialE
   async function handleLogout() {
     await fetch('/api/admin/logout', { method: 'POST' })
     window.location.href = '/admin/login'
+  }
+
+  async function runMigration() {
+    setMigrating(true)
+    setMigrateMsg('')
+    try {
+      const res = await fetch('/api/admin/migrate', { method: 'POST' })
+      const data = await res.json()
+      if (data.ok) {
+        setMigrateMsg('✓ Migrazione completata — ricarica la pagina')
+      } else {
+        setMigrateMsg('Errore: ' + (data.error ?? JSON.stringify(data.results)))
+      }
+    } catch {
+      setMigrateMsg('Errore di rete')
+    } finally {
+      setMigrating(false)
+    }
   }
 
   return (
@@ -107,7 +123,38 @@ export default function AdminDashboard({ photos: initialPhotos, events: initialE
             onDeleted={onPhotoDeleted}
           />
         )}
+
+        {/* Migration helper */}
+        <div style={{
+          marginTop: 'var(--space-9)',
+          borderTop: '1px solid var(--border-quiet)',
+          paddingTop: 'var(--space-5)',
+        }}>
+          <div style={{ fontFamily: 'var(--font-body)', fontSize: 10, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--fg-quiet)', marginBottom: 12 }}>
+            Strumenti DB
+          </div>
+          <button
+            onClick={runMigration}
+            disabled={migrating}
+            style={{
+              padding: '10px 18px', fontSize: 11, letterSpacing: '0.1em', textTransform: 'uppercase',
+              border: '1px solid var(--border)', color: 'var(--fg-muted)', background: 'none',
+              borderRadius: 2, cursor: migrating ? 'wait' : 'pointer', fontFamily: 'var(--font-body)',
+            }}
+          >
+            {migrating ? 'Esecuzione…' : 'Aggiungi colonne location/category'}
+          </button>
+          {migrateMsg && (
+            <div style={{
+              marginTop: 10, fontFamily: 'var(--font-body)', fontSize: 12,
+              color: migrateMsg.startsWith('✓') ? 'var(--accent)' : '#e05c5c',
+            }}>
+              {migrateMsg}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   )
 }
+
