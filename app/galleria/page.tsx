@@ -19,6 +19,23 @@ interface Props {
 
 export default async function GalleriaPage({ searchParams }: Props) {
   const params = await searchParams
+
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+    return (
+      <>
+        <Header activePage="galleria" />
+        <main style={{ padding: '4rem 2rem', textAlign: 'center', fontFamily: 'sans-serif' }}>
+          <h2>Configurazione mancante</h2>
+          <p style={{ color: '#888', marginTop: 8 }}>
+            Le variabili d&apos;ambiente Supabase non sono configurate.<br />
+            Aggiungi <code>NEXT_PUBLIC_SUPABASE_URL</code> e <code>NEXT_PUBLIC_SUPABASE_ANON_KEY</code> nelle impostazioni Vercel.
+          </p>
+        </main>
+        <Footer />
+      </>
+    )
+  }
+
   const supabase = await createClient()
 
   const [photosResult, eventsResult] = await Promise.all([
