@@ -36,23 +36,42 @@ export default async function GalleriaPage({ searchParams }: Props) {
     )
   }
 
-  const supabase = await createClient()
+  let supabase: Awaited<ReturnType<typeof createClient>>
+  let rawPhotos: (Photo & { events: Event | null })[] = []
+  let events: Event[] = []
 
-  const [photosResult, eventsResult] = await Promise.all([
-    supabase
-      .from('photos')
-      .select('*, events(*)')
-      .eq('published', true)
-      .order('created_at', { ascending: false }),
-    supabase.from('events').select('*').order('date', { ascending: false }),
-  ])
+  try {
+    supabase = await createClient()
 
-  const rawPhotos = (photosResult.data ?? []) as (Photo & { events: Event | null })[]
-  const events = (eventsResult.data ?? []) as Event[]
+    const [photosResult, eventsResult] = await Promise.all([
+      supabase
+        .from('photos')
+        .select('*, events(*)')
+        .eq('published', true)
+        .order('created_at', { ascending: false }),
+      supabase.from('events').select('*').order('date', { ascending: false }),
+    ])
+
+    rawPhotos = (photosResult.data ?? []) as (Photo & { events: Event | null })[]
+    events = (eventsResult.data ?? []) as Event[]
+  } catch (err) {
+    return (
+      <>
+        <Header activePage="galleria" />
+        <main style={{ padding: '4rem 2rem', textAlign: 'center', fontFamily: 'monospace' }}>
+          <h2>Errore di configurazione</h2>
+          <pre style={{ background: '#111', color: '#f88', padding: 16, borderRadius: 8, textAlign: 'left', overflow: 'auto', maxWidth: 700, margin: '16px auto' }}>
+            {String(err)}
+          </pre>
+        </main>
+        <Footer />
+      </>
+    )
+  }
 
   const photosWithUrls: PhotoWithUrl[] = rawPhotos.map((p) => ({
     ...p,
-    watermarked_url: supabase.storage
+    watermarked_url: supabase!.storage
       .from('photos-watermarked')
       .getPublicUrl(p.storage_path_watermarked).data.publicUrl,
   }))
