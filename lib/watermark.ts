@@ -27,45 +27,49 @@ export async function applyWatermark(inputBuffer: Buffer): Promise<Buffer> {
 }
 
 function buildWatermarkSVG(w: number, h: number): string {
-  const fontSize = Math.max(12, Math.min(20, Math.round(w / 70)))
-  const letterSpacing = Math.round(fontSize * 0.35)
+  const fontSize = Math.max(14, Math.min(24, Math.round(w / 55)))
+  const letterSpacing = Math.round(fontSize * 0.4)
 
-  const cols = 7
-  const rows = 9
-  const cellW = (w * 1.7) / cols
-  const cellH = (h * 1.5) / rows
-  const offsetX = -w * 0.15
-  const offsetY = -h * 0.12
+  // Dense grid — enough rows/cols to cover image fully even after -25° rotation
+  const cols = 6
+  const rows = 10
+  const cellW = (w * 1.6) / cols
+  const cellH = (h * 1.4) / rows
+  const offsetX = -w * 0.2
+  const offsetY = -h * 0.15
 
   const texts: string[] = []
-  for (let r = 0; r <= rows + 1; r++) {
-    for (let c = 0; c <= cols + 1; c++) {
+  for (let r = 0; r <= rows + 2; r++) {
+    for (let c = 0; c <= cols + 2; c++) {
       const x = (offsetX + c * cellW).toFixed(1)
       const y = (offsetY + r * cellH).toFixed(1)
+      // Dark stroke makes text readable on both light and dark photos
       texts.push(
         `<text x="${x}" y="${y}" ` +
-          `transform="rotate(-22 ${x} ${y})" ` +
-          `fill="rgba(255,255,255,0.35)" ` +
-          `font-family="Arial,Helvetica,sans-serif" ` +
-          `font-size="${fontSize}" font-weight="600" ` +
-          `letter-spacing="${letterSpacing}">${WM_LABEL}</text>`
+        `transform="rotate(-25 ${x} ${y})" ` +
+        `fill="rgba(255,255,255,0.55)" ` +
+        `stroke="rgba(0,0,0,0.35)" stroke-width="0.6" paint-order="stroke" ` +
+        `font-family="Arial,Helvetica,sans-serif" ` +
+        `font-size="${fontSize}" font-weight="700" ` +
+        `letter-spacing="${letterSpacing}">${WM_LABEL}</text>`
       )
     }
   }
 
-  const badgeW = fontSize * 10.5
-  const badgeH = fontSize * 2
-  const bx = (w - badgeW - 16).toFixed(1)
-  const by = (h - badgeH - 16).toFixed(1)
-  const tx = (w - badgeW / 2 - 16).toFixed(1)
-  const ty = (h - 16 - badgeH / 2 + fontSize * 0.4).toFixed(1)
+  // Bold corner badge
+  const badgeW = fontSize * 11
+  const badgeH = fontSize * 2.2
+  const bx = (w - badgeW - 20).toFixed(1)
+  const by = (h - badgeH - 20).toFixed(1)
+  const tx = (w - badgeW / 2 - 20).toFixed(1)
+  const ty = (h - 20 - badgeH / 2 + fontSize * 0.38).toFixed(1)
 
   const cornerBadge =
-    `<rect x="${bx}" y="${by}" width="${badgeW}" height="${badgeH}" fill="rgba(10,10,10,0.6)" rx="1"/>` +
-    `<text x="${tx}" y="${ty}" fill="rgba(255,255,255,0.88)" ` +
+    `<rect x="${bx}" y="${by}" width="${badgeW}" height="${badgeH}" fill="rgba(0,0,0,0.72)" rx="2"/>` +
+    `<text x="${tx}" y="${ty}" fill="rgba(255,255,255,0.95)" ` +
     `font-family="Arial,Helvetica,sans-serif" ` +
-    `font-size="${(fontSize * 0.72).toFixed(1)}" font-weight="600" ` +
-    `letter-spacing="${Math.round(letterSpacing * 0.8)}" ` +
+    `font-size="${(fontSize * 0.75).toFixed(1)}" font-weight="700" ` +
+    `letter-spacing="${Math.round(letterSpacing * 0.9)}" ` +
     `text-anchor="middle">${WM_LABEL}</text>`
 
   return (
